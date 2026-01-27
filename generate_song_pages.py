@@ -40,11 +40,11 @@ def generate_song_pages():
     <title>{title} - {artist} | Hiteria Village</title>
     <script>
         // Redirect to tracks page with hash
-        window.location.href = "/tracks.html#{identifier}";
+        window.location.href = "../tracks.html#{identifier}";
     </script>
 </head>
 <body>
-    <p>Redirecting to <a href="/tracks.html#{identifier}">{title} - {artist}</a>...</p>
+    <p>Redirecting to <a href="../tracks.html#{identifier}">{title} - {artist}</a>...</p>
 </body>
 </html>'''
     

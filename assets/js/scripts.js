@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const localPreviewUrl = `assets/audio/${fileName}`;
           audioModule.playPreview(localPreviewUrl, preview_time, preview_end_time);
         } else {
-          audioModule.playPreview(previewUrl);
+          audioModule.playPreview(previewUrl, preview_time, preview_end_time);
         }
       }
 
@@ -1113,7 +1113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Unmute audio for direct links
             state.isMuted = false;
             audio.muted = false;
-            localStorage.setItem('isMuted', false);
+            localStorage.setItem('isMuted', 'false');
             uiModule.updateMuteIcon();
             
             // Update the filtered tracks index
@@ -1306,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Unmute audio for direct links
             state.isMuted = false;
             audio.muted = false;
-            localStorage.setItem('isMuted', false);
+            localStorage.setItem('isMuted', 'false');
             uiModule.updateMuteIcon();
             
             // Small delay to ensure DOM is ready
