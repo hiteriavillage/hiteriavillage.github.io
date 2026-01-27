@@ -489,7 +489,18 @@ main {
     border: none;
     cursor: pointer;
     font-size: 1.5em;
+    padding: 3px;
+  }
+  
+  #shareButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.7em;
     padding: 5px;
+    position: relative;
+    top: 5px;
+    left: 10px;
   }
   #downloadButton:disabled {
     opacity: 0.5;
@@ -1531,7 +1542,7 @@ body.modal-open, body.video-popup-open {
     .video-sidebar .track-info p {
       font-size: 1em;
     }
-    #muteButton, #downloadButton, #videoMenuButton, #settingsButton, #githubButton {
+    #muteButton, #downloadButton, #videoMenuButton, #shareButton, #settingsButton, #githubButton {
         min-width: 44px;
         min-height: 44px;
         padding: 10px;
@@ -1657,7 +1668,7 @@ body.modal-open, body.video-popup-open {
     }
   }
 
-  #muteButton, #downloadButton, #videoMenuButton, #settingsButton, #githubButton {
+  #muteButton, #downloadButton, #videoMenuButton, #shareButton, #settingsButton, #githubButton {
     min-width: 44px;
     min-height: 44px;
     padding: 10px;

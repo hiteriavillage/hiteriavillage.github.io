@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     content: document.querySelector('.content'),
     logo: document.getElementById('logo'),
     muteButton: document.getElementById('muteButton'),
+    shareButton: document.getElementById('shareButton'),
     settingsButton: document.getElementById('settingsButton'),
     settingsMenu: document.getElementById('settingsMenu'),
     sortSelect: document.getElementById('sortSelect'),
@@ -1109,6 +1110,12 @@ document.addEventListener('DOMContentLoaded', () => {
             t.identifier && t.identifier.toLowerCase() === hash.toLowerCase()
           );
           if (track) {
+            // Unmute audio for direct links
+            state.isMuted = false;
+            audio.muted = false;
+            localStorage.setItem('isMuted', false);
+            uiModule.updateMuteIcon();
+            
             // Update the filtered tracks index
             state.currentTrackIndex = state.currentFilteredTracks.findIndex(
               (t) => t.title === track.title && t.artist === track.artist
@@ -1167,6 +1174,28 @@ document.addEventListener('DOMContentLoaded', () => {
       if (elements.searchInput) elements.searchInput.addEventListener('input', utils.debounce(trackModule.filterTracks, 300));
       if (elements.sortSelect) elements.sortSelect.addEventListener('change', trackModule.filterTracks);
       if (elements.muteButton) elements.muteButton.addEventListener('click', audioModule.toggleMute);
+      if (elements.shareButton) {
+        elements.shareButton.addEventListener('click', () => {
+          const hash = window.location.hash.slice(1);
+          if (hash) {
+            const shareUrl = `https://hiteriavillage.github.io/songs/${hash}.html`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+              // Show feedback - change SVG to checkmark
+              const svg = elements.shareButton.querySelector('svg');
+              const originalPath = svg.innerHTML;
+              svg.innerHTML = '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>';
+              elements.shareButton.title = 'Link copied!';
+              setTimeout(() => {
+                svg.innerHTML = originalPath;
+                elements.shareButton.title = 'Share Link';
+              }, 2000);
+            }).catch(err => {
+              console.error('Failed to copy link:', err);
+              alert('Failed to copy link. Please try again.');
+            });
+          }
+        });
+      }
       if (elements.settingsButton) {
         elements.settingsButton.addEventListener('click', settingsModule.toggleSettingsMenu);
         elements.settingsButton.addEventListener('keydown', (e) => {
@@ -1274,6 +1303,12 @@ document.addEventListener('DOMContentLoaded', () => {
           );
           
           if (track) {
+            // Unmute audio for direct links
+            state.isMuted = false;
+            audio.muted = false;
+            localStorage.setItem('isMuted', false);
+            uiModule.updateMuteIcon();
+            
             // Small delay to ensure DOM is ready
             setTimeout(() => {
               modalModule.openModal(track);

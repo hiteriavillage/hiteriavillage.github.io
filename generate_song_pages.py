@@ -39,12 +39,12 @@ def generate_song_pages():
     <meta name="twitter:image" content="{image_url}">
     <title>{title} - {artist} | Hiteria Village</title>
     <script>
-        // Redirect to main page with hash
-        window.location.href = "/#{identifier}";
+        // Redirect to tracks page with hash
+        window.location.href = "/tracks.html#{identifier}";
     </script>
 </head>
 <body>
-    <p>Redirecting to <a href="/#{identifier}">{title} - {artist}</a>...</p>
+    <p>Redirecting to <a href="/tracks.html#{identifier}">{title} - {artist}</a>...</p>
 </body>
 </html>'''
     

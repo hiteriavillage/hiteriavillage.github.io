@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Number #1 Information For Stuff Related To Hiteria Village">
+    <meta property="og:title" content="Hiteria Village | Wiki">
+    <meta property="og:description" content="Number #1 Information For Stuff Related To Hiteria Village">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://hiteriavillage.github.io/assets/images/logo.png">
+    <meta property="og:url" content="https://hiteriavillage.github.io/wiki.html">
+    <meta property="og:site_name" content="Hiteria Village">
+    <title>Hiteria Village | Wiki</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-box h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .content-box p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .content-box {
+                padding: 25px;
+            }
+
+            .content-box h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            ← Back to Home
+        </a>
+
+        <header>
+            <img src="assets/images/logo.png" alt="Logo" class="logo" onclick="window.location.href='/'">
+            <h1>Wiki</h1>
+        </header>
+
+        <div class="content-box">
+            <h2>Coming Soon</h2>
+            <p>The Hiteria Village Wiki is currently under construction. Check back soon for guides, tutorials, and helpful information about Octave!</p>
+            <p>In the meantime, feel free to explore our <a href="tracks.html" style="color: #fff; text-decoration: underline;">Octave Tracks</a> or join our Discord community.</p>
+        </div>
+    </div>
+</body>
+</html>

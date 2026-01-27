@@ -4,173 +4,217 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="Browse and discover Octave tracks">
-    <meta property="og:title" content="Hiteria Village - Octave Tracks">
-    <meta property="og:description" content="Browse and discover Octave tracks">
+    <meta name="description" content="The Official Hiteria Village Website">
+    <meta property="og:title" content="Hiteria Village">
+    <meta property="og:description" content="The Official Hiteria Village Website">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://hiteriavillage.github.io/assets/images/logo.png">
     <meta property="og:url" content="https://hiteriavillage.github.io/">
     <meta property="og:site_name" content="Hiteria Village">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hiteria Village - Octave Tracks">
-    <meta name="twitter:description" content="Browse and discover Octave tracks">
+    <meta name="twitter:title" content="Hiteria Village">
+    <meta name="twitter:description" content="The Official Hiteria Village Website">
     <meta name="twitter:image" content="https://hiteriavillage.github.io/assets/images/logo.png">
-    <title>Hiteria Village | Octave Tracks</title>
+    <title>Hiteria Village</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" href="assets/images/logo.png">
-    <link rel="stylesheet" href="assets/css/styles.css?v10">
-    <link rel="stylesheet" href="assets/css/modal-layout.css?v1">
-    <script type="module" src="assets/js/scripts.js?v10"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .logo-container img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+        }
+
+        .logo-container h1 {
+            font-size: 3em;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .logo-container p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+            animation: fadeInUp 1s ease-in;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+        }
+
+        .card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .disclaimer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7em;
+            opacity: 0.6;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container h1 {
+                font-size: 2em;
+            }
+
+            .logo-container img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 30px 20px;
+                min-height: 200px;
+            }
+
+            .card-icon {
+                font-size: 3em;
+            }
+
+            .card h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-left">
-                <a href="https://github.com/Encore-Developers/Encore" id="logo">
-                    <img src="assets/images/logo.png" alt="Logo" width="40" height="40">
-                </a>
-            </div>
-            <div class="search-wrapper">
-                <input type="search" id="searchInput" placeholder="Search tracks..." aria-label="Search Tracks">
-            </div>
-            <div class="header-right">
-                <div class="settings-menu-container">
-                    <button id="settingsButton" title="Settings" aria-label="Open settings menu">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.33-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.43-.48-.43h-3.84c-.24 0-.44.19-.48.43l-.36 2.54c-.59.24-1.12.56-1.62.94l-2.39-.96c-.22-.07-.47 0-.59.22L2.74 8.87c-.12.21-.07.47.12.61l2.03 1.58c-.04.3-.06.61-.06.94 0 .33.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.04.24.24.43.48.43h3.84c.24 0 .44-.19.48-.43l.36-2.54c.59-.24 1.12-.56 1.62-.94l2.39.96c.22.07.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-                        </svg>
-                    </button>
-                    <ul id="settingsMenu" class="settings-menu" style="display: none;">
-                        <li data-setting="audio-fade">Fade In Audio: On</li>
-                        <li data-setting="modal-glow">Modal Glow: On</li>
-                        <li data-setting="text-glow">Text Glow: On</li>
-                        <li data-setting="grid-size">Grid Size: 
-                            <span data-grid-size="1">1</span> | 
-                            <span data-grid-size="2">2</span> | 
-                            <span data-grid-size="3">3</span> | 
-                            <span data-grid-size="4">4</span></li>
-                        </li>
-                        <li data-setting="modal-info">Modal Info: Hide</li>
-                        <li>Modal Info Position:
-                        <select data-setting="modal-info-position">
-                        <option value="left-side">Left Side</option>
-                        <option value="right-side">Right Side</option>
-                        <option value="bottom-left">Bottom Left</option>
-                        <option value="bottom-center">Bottom Center</option>
-                        <option value="bottom-right">Bottom Right</option>
-                        </select>
-                        </li>
-                        <li data-setting="reset">Reset Settings</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="header-info">
-        <div class="container">
-            <span id="trackCount" class="track-count"></span>
-        </div>
+    <div class="logo-container">
+        <img src="assets/images/logo.png" alt="Hiteria Village Logo">
+        <h1>Hiteria Village</h1>
+        <p>Welcome to the community</p>
     </div>
-    <main>
-        <div class="container">
-            <div class="filter-wrapper">
-                <select id="sortSelect" class="custom-select">
-                    <option value="latest">Sort: Latest (Recent Creation Date)</option>
-                    <option value="earliest">Sort: Earliest (Oldest Creation Date)</option>
-                    <option value="longest">Sort: Longest (Longest Length)</option>
-                    <option value="shortest">Sort: Shortest (Shortest Length)</option>
-                    <option value="fastest">Sort: Fastest (Highest BPM)</option>
-                    <option value="slowest">Sort: Slowest (Lowest BPM)</option>
-                    <option value="newest">Sort: Newest (Recent Release Year)</option>
-                    <option value="oldest">Sort: Oldest (Oldest Release Year)</option>
-                    <option value="charter">Sort: Charter (A-Z)</option>
-                    <option value="charter_za">Sort: Charter (Z-A)</option>
-                    <option value="hardest">Sort: Hardest (Avg. Difficulty)</option>
-                    <option value="easiest">Sort: Easiest (Avg. Difficulty)</option>
-                    <option value="genre_az">Sort: Genre (A-Z)</option>
-                    <option value="genre_za">Sort: Genre (Z-A)</option>
-                </select>
+
+    <div class="cards-container">
+        <a href="https://discord.gg/6aUtcZTc" class="card" target="_blank" rel="noopener noreferrer">
+            <div class="card-icon">
+                <svg width="80" height="80" viewBox="0 0 71 55" fill="white">
+                    <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
+                </svg>
             </div>
-            <div class="content">
-                <!-- Tracks will be added dynamically here -->
-            </div>
-        </div>
-    </main>
-    <div id="trackModal" class="modal">
-        <button class="modal-nav modal-prev">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-            </svg>
-        </button>
-        <button class="modal-nav modal-next">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-        </button>
-        <div class="modal-content">
-            <span class="modal-close">×</span>
-            <!-- Left Section: Track Info -->
-            <div class="modal-left-section">
-                <div class="modal-header">
-                    <div class="album-art-wrapper">
-                        <img id="modalCover" src="" alt="Track Cover" draggable="false">
-                    </div>
-                    <div class="track-info">
-                        <h2 id="modalTitle" translate="no"></h2>
-                        <p id="modalArtist" translate="no"></p>
-                        <p id="modalDuration" translate="no"></p>
-                    </div>
-                    <div class="button-container">
-                        <button id="muteButton" aria-label="Toggle mute" aria-pressed="false">
-                            <span class="mute-icon" style="display: none;">🔇</span>
-                            <span class="unmute-icon">🔊</span>
-                        </button>
-                        <div class="video-menu-container">
-                            <button id="videoMenuButton" title="Videos" aria-label="Open video menu">
-                                <span class="video-icon">🎥</span>
-                            </button>
-                            <ul id="videoMenu" class="video-menu" style="display: none;">
-                                <li data-instrument="vocals"><span class="instrument-icon vocals"></span>Vocals</li>
-                                <li data-instrument="lead"><span class="instrument-icon lead"></span>Lead</li>
-                                <li data-instrument="bass"><span class="instrument-icon bass"></span>Bass</li>
-                                <li data-instrument="drums"><span class="instrument-icon drums"></span>Drums</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div id="modalDetails" class="modal-details"></div>
-                </div>
-            </div>
-            <!-- Right Section: Background Video -->
-            <div class="modal-right-section">
-                <!-- Video will be inserted here -->
-            </div>
-            <!-- Bottom Section: Difficulties -->
-            <div class="modal-bottom-section">
-                <div id="modalDifficulties" class="modal-difficulties"></div>
-            </div>
-        </div>
+            <h2>Join Discord</h2>
+            <p>Connect with the community and stay updated</p>
+        </a>
+
+        <a href="https://hiteriavillage.fandom.com/wiki/Hiteria_Village_Wiki" class="card">
+            <div class="card-icon">📚</div>
+            <h2>Wiki</h2>
+            <p>Learn more about the server</p>
+        </a>
+
+        <a href="tracks.html" class="card">
+            <div class="card-icon">🎵</div>
+            <h2>Octave Tracks</h2>
+            <p>Browse and discover music tracks</p>
+        </a>
     </div>
-    <div id="videoPopup" class="video-popup" style="display: none;">
-        <span class="video-popup-close">×</span>
-        <div class="video-popup-content">
-            <iframe id="youtubeIframe" width="560" height="315" src="" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-        </div>
-        <div class="video-sidebar">
-            <div class="track-info">
-                <img id="videoTrackCover" src="" alt="Jam Track Cover" class="track-cover" draggable="false">
-                <div class="track-info">
-                    <h2 id="videoTrackTitle" translate="no"></h2>
-                    <p id="videoTrackArtist" translate="no"></p>
-                    <p id="videoTrackDuration" translate="no"></p>
-                </div>
-            </div>
-            <h3>Instruments</h3>
-            <ul id="instrumentList" class="instrument-list">
-                <!-- Instrument options populated dynamically -->
-            </ul>
-        </div>
+
+    <div class="disclaimer">
+        Disclaimer: For now I was lazy I made AI do this page. Not the other ones tho don't worry.
     </div>
 </body>
 </html>
