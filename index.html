@@ -4,50 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="Official Hiteria Village Website" id="meta-description">
-    <meta property="og:title" content="Hiteria Village" id="meta-og-title">
-    <meta property="og:description" content="Official Hiteria Village Website" id="meta-og-description">
+    <meta name="description" content="Browse and discover Octave tracks">
+    <meta property="og:title" content="Hiteria Village - Octave Tracks">
+    <meta property="og:description" content="Browse and discover Octave tracks">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://hiteriavillage.github.io/assets/images/logo.png" id="meta-og-image">
-    <meta property="og:url" content="https://hiteriavillage.github.io/" id="meta-og-url">
+    <meta property="og:image" content="https://hiteriavillage.github.io/assets/images/logo.png">
+    <meta property="og:url" content="https://hiteriavillage.github.io/">
     <meta property="og:site_name" content="Hiteria Village">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hiteria Village" id="meta-twitter-title">
-    <meta name="twitter:description" content="Official Hiteria Village Website" id="meta-twitter-description">
-    <meta name="twitter:image" content="https://hiteriavillage.github.io/assets/images/logo.png" id="meta-twitter-image">
-    <title id="page-title">Hiteria Village | Octave Tracks </title>
-    <script>
-        // Dynamic meta tags for Discord embeds
-        (function() {
-            const hash = window.location.hash.slice(1);
-            if (hash) {
-                fetch('data/tracks.json')
-                    .then(res => res.json())
-                    .then(data => {
-                        const track = data[hash];
-                        if (track) {
-                            const title = `${track.title} - ${track.artist}`;
-                            const description = `${track.genre || 'Music'} • ${track.duration || 'N/A'} • ${track.releaseYear || 'N/A'}`;
-                            const imageUrl = track.cover 
-                                ? `https://hiteriavillage.github.io/assets/covers/${track.cover}`
-                                : 'https://hiteriavillage.github.io/assets/images/logo.png';
-                            const pageUrl = `https://hiteriavillage.github.io/#${hash}`;
-                            
-                            document.getElementById('page-title').textContent = `${title} | Hiteria Village`;
-                            document.getElementById('meta-description').setAttribute('content', description);
-                            document.getElementById('meta-og-title').setAttribute('content', title);
-                            document.getElementById('meta-og-description').setAttribute('content', description);
-                            document.getElementById('meta-og-image').setAttribute('content', imageUrl);
-                            document.getElementById('meta-og-url').setAttribute('content', pageUrl);
-                            document.getElementById('meta-twitter-title').setAttribute('content', title);
-                            document.getElementById('meta-twitter-description').setAttribute('content', description);
-                            document.getElementById('meta-twitter-image').setAttribute('content', imageUrl);
-                        }
-                    })
-                    .catch(err => console.error('Failed to load track data for meta tags:', err));
-            }
-        })();
-    </script>
+    <meta name="twitter:title" content="Hiteria Village - Octave Tracks">
+    <meta name="twitter:description" content="Browse and discover Octave tracks">
+    <meta name="twitter:image" content="https://hiteriavillage.github.io/assets/images/logo.png">
+    <title>Hiteria Village | Octave Tracks</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" href="assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/styles.css?v10">
