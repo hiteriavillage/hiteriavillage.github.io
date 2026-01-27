@@ -47,6 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPreviewUrl: '',
     sawUpdateMessage: false,
     fadeInRequestId: null,
+    fadeOutRequestId: null,
+    replayTimeoutId: null,
+    autoRetryTimeoutId: null,
+    isFadingOut: false,
     tracksPerPage: 10,
     initialLoad: 50,
     touchStartX: 0,
@@ -154,8 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       state.fadeInRequestId = requestAnimationFrame(step);
     },
+    fadeOutAudio: (audio, duration) => {
+      return new Promise((resolve) => {
+        if (state.fadeOutRequestId) cancelAnimationFrame(state.fadeOutRequestId);
+        const startVolume = audio.volume;
+        const startTime = performance.now();
+        const step = (currentTime) => {
+          const elapsed = Math.max(currentTime - startTime, 0);
+          const progress = Math.min(elapsed / duration, 1);
+          audio.volume = Math.max(0, startVolume * (1 - progress));
+          if (progress < 1) {
+            state.fadeOutRequestId = requestAnimationFrame(step);
+          } else {
+            audio.volume = 0;
+            state.fadeOutRequestId = null;
+            resolve();
+          }
+        };
+        state.fadeOutRequestId = requestAnimationFrame(step);
+      });
+    },
     playPreview: (previewUrl, startTime, endTime) => {
       audio.ontimeupdate = null;
+      
+      // Clear any existing replay timeout
+      if (state.replayTimeoutId) {
+        clearTimeout(state.replayTimeoutId);
+        state.replayTimeoutId = null;
+      }
 
       const playSegment = () => {
         if (!state.isMuted && elements.videoPopup.style.display !== 'block') {
@@ -172,25 +202,95 @@ document.addEventListener('DOMContentLoaded', () => {
               } else {
                 audio.volume = 0.25;
               }
+              // Remove any autoplay notice if audio plays successfully
+              document.querySelector('.autoplay-notice')?.remove();
+              
+              // Clear any pending auto-retry
+              if (state.autoRetryTimeoutId) {
+                clearTimeout(state.autoRetryTimeoutId);
+                state.autoRetryTimeoutId = null;
+              }
             })
             .catch((error) => {
               console.error('Audio playback failed:', error);
-              if (utils.isMobile()) {
-                elements.content.insertAdjacentHTML(
-                  'beforebegin',
-                  '<div class="audio-notice">Tap a track to enable audio playback</div>'
-                );
-                setTimeout(() => document.querySelector('.audio-notice')?.remove(), 3000);
+              
+              // Auto-retry after 1 second by toggling mute state
+              if (!state.autoRetryTimeoutId) {
+                state.autoRetryTimeoutId = setTimeout(() => {
+                  state.autoRetryTimeoutId = null;
+                  
+                  // Save original mute state
+                  const originalMuteState = state.isMuted;
+                  
+                  // Toggle mute to opposite state (both state and audio element)
+                  state.isMuted = !originalMuteState;
+                  audio.muted = !originalMuteState;
+                  console.log('Toggled isMuted to:', state.isMuted);
+                  
+                  setTimeout(() => {
+                    // Toggle back to original state (both state and audio element)
+                    state.isMuted = originalMuteState;
+                    audio.muted = originalMuteState;
+                    console.log('Toggled isMuted back to:', state.isMuted);
+                    
+                    audio.play()
+                      .then(() => {
+                        console.log('Audio started after auto-retry');
+                        if (state.fadeInAudioEnabled) {
+                          audioModule.fadeInAudio(audio, 0.25, 3000);
+                        } else {
+                          audio.volume = 0.25;
+                        }
+                      })
+                      .catch(err => {
+                        console.error('Auto-retry failed, audio blocked by browser:', err);
+                      });
+                  }, 10);
+                }, 1000);
               }
             });
         }
         
-        // Set up end time listener
+        // Set up end time listener with fade out and replay
         if (endTime) {
+          const fadeOutDuration = 2000; // 2 seconds fade out
+          const fadeOutStartTime = (endTime / 1000) - (fadeOutDuration / 1000);
+          
           audio.ontimeupdate = () => {
-            if (audio.currentTime >= endTime / 1000) {
+            const currentTime = audio.currentTime;
+            
+            // Start fade out 2 seconds before the end
+            if (currentTime >= fadeOutStartTime && currentTime < endTime / 1000 && !state.isFadingOut) {
+              state.isFadingOut = true;
+              console.log('Starting fade out at', currentTime);
+              audioModule.fadeOutAudio(audio, fadeOutDuration).then(() => {
+                audio.pause();
+                state.isFadingOut = false;
+                
+                // Wait 5 seconds then replay
+                console.log('Waiting 5 seconds before replay...');
+                state.replayTimeoutId = setTimeout(() => {
+                  if (!state.isMuted && elements.videoPopup.style.display !== 'block') {
+                    console.log('Replaying audio...');
+                    audio.currentTime = startTime ? startTime / 1000 : 0;
+                    audio.play()
+                      .then(() => {
+                        if (state.fadeInAudioEnabled) {
+                          audioModule.fadeInAudio(audio, 0.25, 3000);
+                        } else {
+                          audio.volume = 0.25;
+                        }
+                      })
+                      .catch(err => console.error('Replay failed:', err));
+                  }
+                }, 5000);
+              });
+            }
+            
+            // Fallback: pause if we somehow reach the end time
+            if (currentTime >= endTime / 1000) {
               audio.pause();
-              audio.ontimeupdate = null; // remove listener once done
+              audio.ontimeupdate = null;
             }
           };
         }
@@ -542,6 +642,33 @@ document.addEventListener('DOMContentLoaded', () => {
       audio.pause();
       audio.src = '';
       state.currentPreviewUrl = '';
+      state.isFadingOut = false;
+      
+      // Clear replay timeout
+      if (state.replayTimeoutId) {
+        clearTimeout(state.replayTimeoutId);
+        state.replayTimeoutId = null;
+      }
+      
+      // Clear auto-retry timeout
+      if (state.autoRetryTimeoutId) {
+        clearTimeout(state.autoRetryTimeoutId);
+        state.autoRetryTimeoutId = null;
+      }
+      
+      // Clear fade animations
+      if (state.fadeInRequestId) {
+        cancelAnimationFrame(state.fadeInRequestId);
+        state.fadeInRequestId = null;
+      }
+      if (state.fadeOutRequestId) {
+        cancelAnimationFrame(state.fadeOutRequestId);
+        state.fadeOutRequestId = null;
+      }
+      
+      // Remove any notices
+      document.querySelectorAll('.autoplay-notice').forEach(notice => notice.remove());
+      
       modalModule.stopGlowInterval();
       
       // Clear hash from URL
@@ -1303,7 +1430,7 @@ document.addEventListener('DOMContentLoaded', () => {
           );
           
           if (track) {
-            // Unmute audio for direct links
+            // For direct links, unmute audio to enable autoplay
             state.isMuted = false;
             audio.muted = false;
             localStorage.setItem('isMuted', 'false');
@@ -1312,6 +1439,35 @@ document.addEventListener('DOMContentLoaded', () => {
             // Small delay to ensure DOM is ready
             setTimeout(() => {
               modalModule.openModal(track);
+              
+              // Only attempt to play if not muted
+              if (!state.isMuted) {
+                // Simulate user interaction to bypass autoplay restrictions
+                setTimeout(() => {
+                  const clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                  });
+                  document.body.dispatchEvent(clickEvent);
+                  
+                  // Force audio play attempt after simulated interaction
+                  if (!audio.paused) {
+                    console.log('Audio already playing');
+                  } else {
+                    audio.play()
+                      .then(() => {
+                        console.log('Audio started after simulated interaction');
+                        if (state.fadeInAudioEnabled) {
+                          audioModule.fadeInAudio(audio, 0.25, 3000);
+                        } else {
+                          audio.volume = 0.25;
+                        }
+                      })
+                      .catch(err => console.log('Simulated interaction play failed:', err));
+                  }
+                }, 200);
+              }
             }, 100);
           }
         }

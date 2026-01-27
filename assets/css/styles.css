@@ -992,6 +992,22 @@ main {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.autoplay-notice {
+    animation: fadeIn 0.3s ease;
+}
+
 .modal {
     z-index: 1000;
 }
