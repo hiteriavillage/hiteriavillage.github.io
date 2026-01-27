@@ -1305,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.shareButton.addEventListener('click', () => {
           const hash = window.location.hash.slice(1);
           if (hash) {
-            const shareUrl = `https://hiteriavillage.github.io/songs/${hash}.html`;
+            const shareUrl = `https://hiteriavillage.github.io/songs/${hash}`;
             navigator.clipboard.writeText(shareUrl).then(() => {
               // Show feedback - change SVG to checkmark
               const svg = elements.shareButton.querySelector('svg');
