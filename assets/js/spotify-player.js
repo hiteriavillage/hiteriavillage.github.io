@@ -4,7 +4,7 @@
  */
 
 class SpotifyPlayer {
-    constructor(apiBaseUrl = 'http://208.92.234.17:8000') {
+    constructor(apiBaseUrl = '/assets/audio') {
         this.apiBaseUrl = apiBaseUrl;
         this.songs = [];
         this.currentSongIndex = -1;
