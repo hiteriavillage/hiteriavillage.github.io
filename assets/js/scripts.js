@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     content: document.querySelector('.content'),
     logo: document.getElementById('logo'),
     muteButton: document.getElementById('muteButton'),
+    volumeSlider: document.getElementById('volumeSlider'),
+    volumeSliderContainer: document.getElementById('volumeSliderContainer'),
+    volumePercentage: document.getElementById('volumePercentage'),
     shareButton: document.getElementById('shareButton'),
     settingsButton: document.getElementById('settingsButton'),
     settingsMenu: document.getElementById('settingsMenu'),
@@ -57,8 +60,40 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const audio = new Audio();
-  audio.volume = 0.25;
+  // Initialize volume from localStorage or default to 50%
+  const storedVolume = localStorage.getItem('audioVolume');
+  const initialVolume = storedVolume ? parseInt(storedVolume, 10) : 50;
+  audio.volume = initialVolume / 100;
   audio.muted = state.isMuted;
+
+  // Volume Control Functions
+  const volumeControl = {
+    setVolume: (volume) => {
+      const volumeValue = Math.max(0, Math.min(volume / 100, 1));
+      audio.volume = volumeValue;
+      localStorage.setItem('audioVolume', volume);
+      
+      // Update volume slider and percentage display
+      // Direct mapping: higher slider value = higher volume
+      if (elements.volumeSlider) elements.volumeSlider.value = volume;
+      if (elements.volumePercentage) elements.volumePercentage.textContent = `${volume}%`;
+    },
+    
+    getStoredVolume: () => {
+      const storedVolume = localStorage.getItem('audioVolume');
+      return storedVolume ? parseInt(storedVolume, 10) : 50; // Default to 50%
+    },
+    
+    initializeVolume: () => {
+      const volume = volumeControl.getStoredVolume();
+      volumeControl.setVolume(volume);
+    }
+  };
+
+  // Initialize volume control
+  setTimeout(() => {
+    volumeControl.initializeVolume();
+  }, 100);
 
   let player;
   let intersectionObserver;
@@ -178,6 +213,26 @@ document.addEventListener('DOMContentLoaded', () => {
         state.fadeOutRequestId = requestAnimationFrame(step);
       });
     },
+    setVolume: (volume) => {
+      const volumeValue = Math.max(0, Math.min(volume / 100, 1));
+      audio.volume = volumeValue;
+      localStorage.setItem('audioVolume', volume);
+      
+      // Update volume slider and percentage display
+      const volumeSlider = document.getElementById('volumeSlider');
+      const volumePercentage = document.getElementById('volumePercentage');
+      // Direct mapping for rotated slider (rotation handles orientation)
+      if (volumeSlider) volumeSlider.value = volume;
+      if (volumePercentage) volumePercentage.textContent = `${volume}%`;
+    },
+    getStoredVolume: () => {
+      const storedVolume = localStorage.getItem('audioVolume');
+      return storedVolume ? parseInt(storedVolume, 10) : 50; // Default to 50%
+    },
+    initializeVolume: () => {
+      const volume = audioModule.getStoredVolume();
+      audioModule.setVolume(volume);
+    },
     playPreview: (previewUrl, startTime, endTime) => {
       audio.ontimeupdate = null;
       
@@ -198,9 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(() => {
               console.log(`Audio playing: ${previewUrl} from ${startTime || 0}ms`);
               if (state.fadeInAudioEnabled) {
-                audioModule.fadeInAudio(audio, 0.25, 3000);
-              } else {
-                audio.volume = 0.25;
+                const targetVolume = audioModule.getStoredVolume() / 100;
+                audioModule.fadeInAudio(audio, targetVolume, 3000);
               }
               // Remove any autoplay notice if audio plays successfully
               document.querySelector('.autoplay-notice')?.remove();
@@ -237,9 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
                       .then(() => {
                         console.log('Audio started after auto-retry');
                         if (state.fadeInAudioEnabled) {
-                          audioModule.fadeInAudio(audio, 0.25, 3000);
-                        } else {
-                          audio.volume = 0.25;
+                          const targetVolume = audioModule.getStoredVolume() / 100;
+                          audioModule.fadeInAudio(audio, targetVolume, 3000);
                         }
                       })
                       .catch(err => {
@@ -276,9 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     audio.play()
                       .then(() => {
                         if (state.fadeInAudioEnabled) {
-                          audioModule.fadeInAudio(audio, 0.25, 3000);
-                        } else {
-                          audio.volume = 0.25;
+                          const targetVolume = audioModule.getStoredVolume() / 100;
+                          audioModule.fadeInAudio(audio, targetVolume, 3000);
                         }
                       })
                       .catch(err => console.error('Replay failed:', err));
@@ -319,9 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(() => {
             console.log('Audio unmuted:', state.currentPreviewUrl);
             if (state.fadeInAudioEnabled) {
-              audioModule.fadeInAudio(audio, 0.25, 3000);
-            } else {
-              audio.volume = 0.25;
+              audioModule.fadeInAudio(audio, audio.volume, 3000);
             }
           })
           .catch((error) => console.error('Audio playback failed:', error));
@@ -548,10 +598,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (previewUrl) {
-        if (previewUrl.endsWith('.mp3')) {
-          const fileName = previewUrl.split('/').pop();
-          const localPreviewUrl = `assets/audio/${fileName}`;
-          audioModule.playPreview(localPreviewUrl, preview_time, preview_end_time);
+        // Use streaming server URLs directly if they contain the server host
+        if (previewUrl.includes('208.92.234.17:8000')) {
+          audioModule.playPreview(previewUrl, preview_time, preview_end_time);
+        } else if (previewUrl.endsWith('.mp3')) {
+          // Fallback: construct streaming server URL from filename
+          const fileName = previewUrl.split('/').pop().replace('.mp3', '');
+          const streamingUrl = `http://208.92.234.17:8000/stream/${fileName}.mp3`;
+          audioModule.playPreview(streamingUrl, preview_time, preview_end_time);
         } else {
           audioModule.playPreview(previewUrl, preview_time, preview_end_time);
         }
@@ -991,12 +1045,16 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         modalModule.openModal(track);
         if (utils.isMobile() && track.previewUrl) {
-          if (track.previewUrl.endsWith('.mp3')) {
-              const fileName = track.previewUrl.split('/').pop();
-              const localPreviewUrl = `assets/audio/${fileName}`;
-              audioModule.playPreview(localPreviewUrl, track.preview_time, track.preview_end_time);
+          // Use streaming server URLs directly if they contain the server host
+          if (track.previewUrl.includes('208.92.234.17:8000')) {
+            audioModule.playPreview(track.previewUrl, track.preview_time, track.preview_end_time);
+          } else if (track.previewUrl.endsWith('.mp3')) {
+            // Fallback: construct streaming server URL from filename
+            const fileName = track.previewUrl.split('/').pop().replace('.mp3', '');
+            const streamingUrl = `http://208.92.234.17:8000/stream/${fileName}.mp3`;
+            audioModule.playPreview(streamingUrl, track.preview_time, track.preview_end_time);
           } else {
-              audioModule.playPreview(track.previewUrl);
+            audioModule.playPreview(track.previewUrl, track.preview_time, track.preview_end_time);
           }
           trackElement.classList.add('mobile-highlight');
           setTimeout(() => trackElement.classList.remove('mobile-highlight'), 300);
@@ -1301,6 +1359,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (elements.searchInput) elements.searchInput.addEventListener('input', utils.debounce(trackModule.filterTracks, 300));
       if (elements.sortSelect) elements.sortSelect.addEventListener('change', trackModule.filterTracks);
       if (elements.muteButton) elements.muteButton.addEventListener('click', audioModule.toggleMute);
+      
+      // Volume slider event listener
+      if (elements.volumeSlider) {
+        elements.volumeSlider.addEventListener('input', (e) => {
+          // Direct mapping: slider value = volume (up = higher volume)
+          const volume = parseInt(e.target.value, 10);
+          audioModule.setVolume(volume);
+        });
+      }
       if (elements.shareButton) {
         elements.shareButton.addEventListener('click', () => {
           const hash = window.location.hash.slice(1);
@@ -1407,6 +1474,10 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsModule.handleSettingsMenuClick();
     eventModule.init();
     uiModule.updateSettingsUI();
+    
+    // Initialize volume from localStorage
+    audioModule.initializeVolume();
+    
     utils.fetchWithRetry(`data/tracks.json?_=${Date.now()}`)
       .then((data) => {
         // Store tracks with their identifiers (JSON keys)

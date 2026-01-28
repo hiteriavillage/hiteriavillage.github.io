@@ -20,7 +20,12 @@
     <link rel="icon" type="image/png" href="assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/styles.css?v10">
     <link rel="stylesheet" href="assets/css/modal-layout.css?v1">
+    <link rel="stylesheet" href="assets/css/volume-controls.css?v1">
+    <link rel="stylesheet" href="assets/css/volume-controls.css?v1">
     <script type="module" src="assets/js/scripts.js?v10"></script>
+    <!-- Spotify Player Integration -->
+    <script src="assets/js/spotify-player.js"></script>
+    <script src="assets/js/tracks-integration.js"></script>
 </head>
 <body>
     <header class="header">
@@ -121,10 +126,16 @@
                         <p id="modalDuration" translate="no"></p>
                     </div>
                     <div class="button-container">
-                        <button id="muteButton" aria-label="Toggle mute" aria-pressed="false">
-                            <span class="mute-icon" style="display: none;">🔇</span>
-                            <span class="unmute-icon">🔊</span>
-                        </button>
+                        <div class="volume-container">
+                            <button id="muteButton" aria-label="Toggle mute" aria-pressed="false">
+                                <span class="mute-icon" style="display: none;">🔇</span>
+                                <span class="unmute-icon">🔊</span>
+                            </button>
+                            <div class="volume-slider-container" id="volumeSliderContainer">
+                                <input type="range" id="volumeSlider" min="0" max="100" value="50" class="volume-slider">
+                                <div class="volume-percentage" id="volumePercentage">50%</div>
+                            </div>
+                        </div>
                         <div class="video-menu-container">
                             <button id="videoMenuButton" title="Videos" aria-label="Open video menu">
                                 <span class="video-icon">🎥</span>
